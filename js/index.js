@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import Sample from "../Sample.js";
 import SampleWASM from "../Sample.wasm";
 
+let coreModule;
+
 const sample = Sample({
   locateFile: () => {
     return SampleWASM;
@@ -12,7 +14,16 @@ const sample = Sample({
 
 sample.then((core) => {
   console.log(core.add(1, 2));
+  coreModule = core;
+
+  requestAnimationFrame(draw);
 });
+
+const draw = () => {
+  coreModule.render("#glCanvas");
+
+  requestAnimationFrame(draw);
+};
 
 ReactDOM.render(
   <div>
